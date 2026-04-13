@@ -6,17 +6,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # ЭТО ГЛАВНОЕ: запуск прямо на твоем сервере
     steps:
-      - name: Deploy to Ubuntu Server via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            echo '${{ secrets.GHCR_TOKEN }}' | docker login ghcr.io -u '${{ secrets.GHCR_USER }}' --password-stdin
-            cd ${{ secrets.DEPLOY_PATH }}
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
+      - name: Deploy commands
+        run: |
+          # Входим в GHCR
+          echo '${{ secrets.GHCR_TOKEN }}' | docker login ghcr.io -u '${{ secrets.GHCR_USER }}' --password-stdin
+          # Переходим в папку с проектом
+          cd ${{ secrets.DEPLOY_PATH }}
+          # Обновляем и запускаем стек
+          docker compose pull
+          docker compose up -d
+          docker image prune -f
