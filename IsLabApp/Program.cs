@@ -39,10 +39,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok", time = DateTime.UtcNow }));
-app.MapGet("/version", (IConfiguration config) => Results.Ok(new {
-    name = config["App:Name"],
-    version = config["App:Version"]
-}));
+app.MapGet("/version", () => Results.Ok(new { message = "L11: AutoDeploy is working! v2" }));
 
 var notes = new List<Note>();
 var nextId = 1;
